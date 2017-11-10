@@ -16,4 +16,6 @@ public class SocketChannelInitializer extends ChannelInitializer<SocketChannel> 
         pipeline.addLast("http-response-encoder", new HttpResponseEncoder());
         pipeline.addLast("request-handler", new WebSocketServerProtocolHandler("/websocket"));
     }
+
+
 }
