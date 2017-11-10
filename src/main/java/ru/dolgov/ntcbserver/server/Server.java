@@ -4,7 +4,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.socket.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class Server {
@@ -17,8 +17,8 @@ public class Server {
     }
 
     public void run() throws Exception {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        final EventLoopGroup bossGroup = new NioEventLoopGroup();
+        final EventLoopGroup workerGroup = new NioEventLoopGroup();
         try{
             ServerBootstrap server = new ServerBootstrap();
             System.out.println("server created");
@@ -34,8 +34,8 @@ public class Server {
             channelFuture.channel().closeFuture().sync();
             System.out.println("close future");
         } finally {
-            workerGroup.shutdown();
-            bossGroup.shutdown();
+            workerGroup.shutdownGracefully();
+            bossGroup.shutdownGracefully();
             System.out.println("shutdown");
         }
     }

@@ -12,9 +12,10 @@ public class SocketChannelInitializer extends ChannelInitializer<SocketChannel> 
     @Override
     public void initChannel(SocketChannel socketChannel) throws Exception {
         final ChannelPipeline pipeline = socketChannel.pipeline();
-        pipeline.addLast("http-request-decoder", new HttpRequestDecoder());
-        pipeline.addLast("http-response-encoder", new HttpResponseEncoder());
-        pipeline.addLast("request-handler", new WebSocketServerProtocolHandler("/websocket"));
+        //pipeline.addLast("http-request-decoder", new HttpRequestDecoder());
+        //pipeline.addLast("http-response-encoder", new HttpResponseEncoder());
+        //pipeline.addLast("request-handler", new WebSocketServerProtocolHandler("/websocket"));
+        pipeline.addLast("simpleHandler", new SimpleHandler());
     }
 
 
