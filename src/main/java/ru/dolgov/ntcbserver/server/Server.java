@@ -8,11 +8,12 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class Server {
-
+    private String address;
     private int port;
     private ChannelFuture channelFuture;
 
-    public Server(int port) {
+    public Server(String address, int port) {
+        this.address = address;
         this.port = port;
     }
 
@@ -22,7 +23,7 @@ public class Server {
         try{
             ServerBootstrap server = new ServerBootstrap();
             System.out.println("server created");
-            server.localAddress("localhost", port);
+            server.localAddress(address, port);
             server.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                     .childHandler(new SocketChannelInitializer())
                     .option(ChannelOption.SO_BACKLOG, 128)
