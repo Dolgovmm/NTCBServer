@@ -6,6 +6,7 @@ public class TelemetricFrame {
     private double longitude;
     private double speed;
     private long course;
+    private long time;
 
     public TelemetricFrame(){
         this.imei = -1;
@@ -13,14 +14,16 @@ public class TelemetricFrame {
         this.longitude = -1;
         this.speed = -1;
         this.course = -1;
+        this.time = -1;
     }
 
-    public TelemetricFrame(long imei, double lalitude, double longitude, double speed, long course) {
+    public TelemetricFrame(long imei, double lalitude, double longitude, double speed, long course, long time) {
         this.imei = imei;
         this.lalitude = lalitude;
         this.longitude = longitude;
         this.speed = speed;
         this.course = course;
+        this.time = time;
     }
 
     public long getImei() {
@@ -63,6 +66,14 @@ public class TelemetricFrame {
         this.course = course;
     }
 
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -76,6 +87,8 @@ public class TelemetricFrame {
         sb.append(speed);
         sb.append(", course=");
         sb.append(course);
+        sb.append(", time=");
+        sb.append(time);
         sb.append("}");
         return sb.toString();
     }
