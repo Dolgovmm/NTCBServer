@@ -1,23 +1,20 @@
 package ru.dolgov.ntcbserver.server;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.util.ReferenceCountUtil;
 import ru.dolgov.ntcbserver.messagehandler.MessageHandler;
 
 import java.util.Arrays;
 
-public class SimpleHandler extends SimpleChannelInboundHandler<Object> {
+public class SimpleHandler extends ChannelInboundHandlerAdapter {
 
     private MessageHandler messageHandler;
+    private byte[] outBytes;
 
     public SimpleHandler(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
     }
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {}
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -26,13 +23,14 @@ public class SimpleHandler extends SimpleChannelInboundHandler<Object> {
             byte[] inBytes = new byte[buffer.readableBytes()];
             int readerIndex = buffer.readerIndex();
             buffer.getBytes(readerIndex, inBytes);
-            byte[] outBytes = messageHandler.checkMessage(inBytes);
+            outBytes = messageHandler.checkMessage(inBytes);
             System.out.println(Arrays.toString(outBytes));
-            buffer = ctx.alloc().buffer(outBytes.length);
-            int writeIndex = buffer.writerIndex();
-            buffer.setBytes(writeIndex, outBytes);
-            ctx.write(buffer);
-            ctx.flush();
+            ByteBuf writeBuffer = ctx.alloc().buffer(inBytes.length);
+            int writeIndex = writeBuffer.writerIndex();
+            writeBuffer.setBytes(writeIndex, inBytes);
+            final ChannelFuture channelFuture = ctx.writeAndFlush(writeBuffer);
+
+
         } finally {
             ReferenceCountUtil.release(msg);
         }

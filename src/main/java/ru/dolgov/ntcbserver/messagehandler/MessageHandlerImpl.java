@@ -3,7 +3,6 @@ package ru.dolgov.ntcbserver.messagehandler;
 import java.util.Arrays;
 
 public class MessageHandlerImpl implements MessageHandler {
-    private Message message;
 
     @Override
     public byte[] checkMessage(byte[] bytes) {
@@ -31,6 +30,7 @@ public class MessageHandlerImpl implements MessageHandler {
         message.setCsd(getCRC(Arrays.copyOfRange(bytes, 16, 35)));
         message.setCsp(getCRC(Arrays.copyOfRange(bytes, 0, 15)));
         message.setImei(getImei(Arrays.copyOfRange(bytes, 20, 35)));
+        System.out.println(message.toString());
         return createResponse(message);
     }
 
@@ -53,8 +53,8 @@ public class MessageHandlerImpl implements MessageHandler {
         bytes[16] = 0x2a;
         bytes[17] = 0x3c;
         bytes[18] = 0x53;
-        bytes[14] = getCRC(Arrays.copyOfRange(bytes, 16, 19));
-        bytes[15] = getCRC(Arrays.copyOfRange(bytes, 0, 15));
+        bytes[14] = (byte)getCRC(Arrays.copyOfRange(bytes, 16, 19));
+        bytes[15] = (byte)getCRC(Arrays.copyOfRange(bytes, 0, 15));
         return bytes;
     }
 
@@ -73,7 +73,6 @@ public class MessageHandlerImpl implements MessageHandler {
 
     private int getId(byte[] bytes) {
         int id = bytes[0] & 0xFF;
-
         for (int i = bytes.length - 1; i > 0; i--) {
             id = id | ((bytes[i] & 0xFF) << (i * 8));
         }
@@ -94,12 +93,12 @@ public class MessageHandlerImpl implements MessageHandler {
         return bytes;
     }
 
-    private byte getCRC(byte[] bytes) {
+    private char getCRC(byte[] bytes) {
         int summ = 0;
-        for (int i = 0; i < bytes.length; i++) {
+        for (int i = 0; i < bytes.length-1; i++) {
             summ ^= bytes[i];
         }
-        return (byte)(summ & 0xFF);
+        return (char)(summ & 0xFF);
     }
 
     private char[] getCharArray(byte[] bytes) {
@@ -108,5 +107,17 @@ public class MessageHandlerImpl implements MessageHandler {
             chars[i] = (char)bytes[i];
         }
         return chars;
+    }
+
+    public static byte crc8 (byte[] buffer)
+    {
+        byte crc = (byte) 0xFF;
+        for (byte b : buffer) {
+            crc ^= b;
+            for (int i = 0; i < 8; i++) {
+                crc = (crc & 0x80) != 0 ? (byte) ((crc << 1) ^ 0x31) : (byte) (crc << 1);
+            }
+        }
+        return crc;
     }
 }
