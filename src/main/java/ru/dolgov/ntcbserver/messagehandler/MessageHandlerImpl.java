@@ -7,9 +7,9 @@ public class MessageHandlerImpl implements MessageHandler {
     @Override
     public byte[] checkMessage(byte[] bytes) {
         System.out.println(Arrays.toString(bytes));
-        byte[] response;
+        byte[] response = new byte[1];
         if (bytes.length == 35) {
-            response = checkSettings(bytes);
+            //response = checkSettings(bytes);
         } else {
             if (bytes.length == 32) {
                 response = checkFrame(bytes);
@@ -21,42 +21,42 @@ public class MessageHandlerImpl implements MessageHandler {
         return response;
     }
 
-    private byte[] checkSettings(byte[] bytes) {
-        Message message = new Message();
-        message.setPreambula(getPreambula(Arrays.copyOfRange(bytes, 0, 4)));
-        message.setIdDc(getId(Arrays.copyOfRange(bytes, 4, 8)));
-        message.setIdObj(getId(Arrays.copyOfRange(bytes, 8, 12)));
-        message.setSize(getId(Arrays.copyOfRange(bytes, 12, 14)));
-        message.setCsd(getCRC(Arrays.copyOfRange(bytes, 16, 35)));
-        message.setCsp(getCRC(Arrays.copyOfRange(bytes, 0, 15)));
-        message.setImei(getImei(Arrays.copyOfRange(bytes, 20, 35)));
-        System.out.println(message.toString());
-        return createResponse(message);
-    }
+//    private byte[] checkSettings(byte[] bytes) {
+//        Message message = new Message();
+//        message.setPreambula(getPreambula(Arrays.copyOfRange(bytes, 0, 4)));
+//        message.setIdDc(getId(Arrays.copyOfRange(bytes, 4, 8)));
+//        message.setIdObj(getId(Arrays.copyOfRange(bytes, 8, 12)));
+//        message.setSize(getId(Arrays.copyOfRange(bytes, 12, 14)));
+//        message.setCsd(getCRC(Arrays.copyOfRange(bytes, 16, 35)));
+//        message.setCsp(getCRC(Arrays.copyOfRange(bytes, 0, 15)));
+//        message.setImei(getImei(Arrays.copyOfRange(bytes, 20, 35)));
+//        System.out.println(message.toString());
+//        return createResponse(message);
+//    }
 
-    private byte[] createResponse(Message message) {
-        byte[] bytes = new byte[19];
-        bytes[0] = 0x40;
-        bytes[1] = 0x4e;
-        bytes[2] = 0x54;
-        bytes[3] = 0x43;
-        byte[] idObj = setID(message.getIdObj());
-        for (int i = 0; i < idObj.length; i++) {
-            bytes[i + 4] = idObj[idObj.length - 1 - i];
-        }
-        byte[] iddc = setID(message.getIdDc());
-        for (int i = 0; i < iddc.length; i++) {
-            bytes[i + 8] = iddc[idObj.length - 1 - i];
-        }
-        bytes[12] = 0x03;
-        bytes[13] = 0x00;
-        bytes[16] = 0x2a;
-        bytes[17] = 0x3c;
-        bytes[18] = 0x53;
-        bytes[14] = (byte)getCRC(Arrays.copyOfRange(bytes, 16, 19));
-        bytes[15] = (byte)getCRC(Arrays.copyOfRange(bytes, 0, 15));
-        return bytes;
-    }
+//    private byte[] createResponse(Message message) {
+//        byte[] bytes = new byte[19];
+//        bytes[0] = 0x40;
+//        bytes[1] = 0x4e;
+//        bytes[2] = 0x54;
+//        bytes[3] = 0x43;
+//        byte[] idObj = setID(message.getIdObj());
+//        for (int i = 0; i < idObj.length; i++) {
+//            bytes[i + 4] = idObj[idObj.length - 1 - i];
+//        }
+//        byte[] iddc = setID(message.getIdDc());
+//        for (int i = 0; i < iddc.length; i++) {
+//            bytes[i + 8] = iddc[idObj.length - 1 - i];
+//        }
+//        bytes[12] = 0x03;
+//        bytes[13] = 0x00;
+//        bytes[16] = 0x2a;
+//        bytes[17] = 0x3c;
+//        bytes[18] = 0x53;
+//        bytes[14] = (byte)getCRC(Arrays.copyOfRange(bytes, 16, 19));
+//        bytes[15] = (byte)getCRC(Arrays.copyOfRange(bytes, 0, 15));
+//        return bytes;
+//    }
 
     private byte[] checkFrame(byte[] bytes) {
         byte[] response = new byte[1];

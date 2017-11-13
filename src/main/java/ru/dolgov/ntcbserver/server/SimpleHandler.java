@@ -10,7 +10,6 @@ import java.util.Arrays;
 public class SimpleHandler extends ChannelInboundHandlerAdapter {
 
     private MessageHandler messageHandler;
-    private byte[] outBytes;
 
     public SimpleHandler(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
@@ -23,7 +22,7 @@ public class SimpleHandler extends ChannelInboundHandlerAdapter {
             byte[] inBytes = new byte[buffer.readableBytes()];
             int readerIndex = buffer.readerIndex();
             buffer.getBytes(readerIndex, inBytes);
-            outBytes = messageHandler.checkMessage(inBytes);
+            byte[] outBytes = messageHandler.checkMessage(inBytes);
             System.out.println(Arrays.toString(outBytes));
             ByteBuf writeBuffer = ctx.alloc().buffer(inBytes.length);
             int writeIndex = writeBuffer.writerIndex();
