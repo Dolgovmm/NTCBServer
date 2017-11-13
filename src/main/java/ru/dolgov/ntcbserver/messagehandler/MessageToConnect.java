@@ -5,13 +5,6 @@ import java.util.Arrays;
 public class MessageToConnect extends Message {
 
     public MessageToConnect() {
-        preambula = new String();
-        idObj = -1;
-        idDc = -1;
-        size = -1;
-        csd = -1;
-        csp = -1;
-        imei = -1;
     }
 
     @Override

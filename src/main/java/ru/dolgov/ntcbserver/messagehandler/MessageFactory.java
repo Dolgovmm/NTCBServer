@@ -10,7 +10,7 @@ public class MessageFactory {
             return new MessageToConnect();
         }
         if (msg.contains("*>FLEX")) {
-
+            return new MessageToSetSetting();
         }
         return new MessageWithFrame();
     }

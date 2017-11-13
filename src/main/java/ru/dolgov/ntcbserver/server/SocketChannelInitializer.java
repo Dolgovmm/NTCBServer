@@ -11,6 +11,5 @@ public class SocketChannelInitializer extends ChannelInitializer<SocketChannel> 
         final ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast(new MessageEncoder());
         pipeline.addLast(new MessageDecoder());
-        //socketChannel.pipeline().addLast(new MessageEncoder(), new MessageDecoder());
     }
 }

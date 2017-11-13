@@ -1,9 +1,5 @@
 package ru.dolgov.ntcbserver.messagehandler;
 
-import ru.dolgov.ntcbserver.Entity.TelemetricFrame;
-
-import java.util.Arrays;
-
 public abstract class Message {
     protected String preambula;
     protected int idObj;
