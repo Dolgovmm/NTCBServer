@@ -5,12 +5,15 @@ import java.util.Arrays;
 public class MessageFactory {
 
     public static Message getMessage(byte[] bytes) {
-        String msg = new String(Message.getCharArray(Arrays.copyOfRange(bytes, 16, bytes.length)));
+        String msg = new String(Message.getCharArray(Arrays.copyOfRange(bytes, 0, bytes.length)));
         if ((msg.contains("*>S")) && bytes.length == 35) {
             return new MessageToConnect();
         }
         if ((msg.contains("*>FLEX")) && bytes.length == 35) {
             return new MessageToSetSetting();
+        }
+        if ((msg.contains("~C")) && bytes.length == 32) {
+            return new MessageWithFrame();
         }
         return new MessageWithFrame();
     }

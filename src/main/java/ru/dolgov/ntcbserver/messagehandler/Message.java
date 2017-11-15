@@ -169,7 +169,7 @@ public abstract class Message {
         return Long.parseLong(new String(getCharArray(bytes)));
     }
 
-    protected int getId(byte[] bytes) {
+    protected int getIntFromBytes(byte[] bytes) {
         int id = bytes[0] & 0xFF;
         for (int i = bytes.length - 1; i > 0; i--) {
             id = id | ((bytes[i] & 0xFF) << (i * 8));
@@ -177,7 +177,7 @@ public abstract class Message {
         return id;
     }
 
-    protected byte[] setID(int value) {
+    protected byte[] getBytesFromInt(int value) {
 //        byte[] bytes = new byte[size - 1];
 //        bytes[size - 1] = (byte) (value & 0xFF);
 //        for (int i = 1; i < size - 2; i++) {

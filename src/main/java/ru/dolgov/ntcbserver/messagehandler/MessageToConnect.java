@@ -10,9 +10,9 @@ public class MessageToConnect extends Message {
     @Override
     public void fromByteArray(byte[] bytes)     {
         preambula = getPreambula(Arrays.copyOfRange(bytes, 0, 4));
-        idDc = getId(Arrays.copyOfRange(bytes, 4, 8));
-        idObj = getId(Arrays.copyOfRange(bytes, 8, 12));
-        size = getId(Arrays.copyOfRange(bytes, 12, 14));
+        idDc = getIntFromBytes(Arrays.copyOfRange(bytes, 4, 8));
+        idObj = getIntFromBytes(Arrays.copyOfRange(bytes, 8, 12));
+        size = getIntFromBytes(Arrays.copyOfRange(bytes, 12, 14));
         csd = getCRC(Arrays.copyOfRange(bytes, 16, 35));
         csp = getCRC(Arrays.copyOfRange(bytes, 0, 15));
         imei = getImei(Arrays.copyOfRange(bytes, 20, 35));
@@ -26,11 +26,11 @@ public class MessageToConnect extends Message {
         bytes[1] = 0x4e;
         bytes[2] = 0x54;
         bytes[3] = 0x43;
-        byte[] tmp = setID(idObj);
+        byte[] tmp = getBytesFromInt(idObj);
         for (int i = 0; i < tmp.length; i++) {
             bytes[i + 4] = tmp[tmp.length - 1 - i];
         }
-        tmp = setID(idDc);
+        tmp = getBytesFromInt(idDc);
         for (int i = 0; i < tmp.length; i++) {
             bytes[i + 8] = tmp[tmp.length - 1 - i];
         }
