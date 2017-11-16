@@ -1,5 +1,7 @@
 package ru.dolgov.ntcbserver.messagehandler;
 
+import java.util.Arrays;
+
 public abstract class Message {
     protected String preambula;
     protected int idObj;
@@ -165,16 +167,20 @@ public abstract class Message {
         return new String(getCharArray(bytes));
     }
 
-    protected long getImei(byte[] bytes) {
-        return Long.parseLong(new String(getCharArray(bytes)));
+    protected int getIntFromBytes(byte[] bytes) {
+        int result = bytes[0] & 0xFF;
+        for (int i = bytes.length - 1; i > 0; i--) {
+            result = result | ((bytes[i] & 0xFF) << (i * 8));
+        }
+        return result;
     }
 
-    protected int getIntFromBytes(byte[] bytes) {
-        int id = bytes[0] & 0xFF;
-        for (int i = bytes.length - 1; i > 0; i--) {
-            id = id | ((bytes[i] & 0xFF) << (i * 8));
+    protected long getLongFromBytes(byte[] bytes) {
+        long result = bytes[0] & 0xFF;
+        for (int i = 1; i < bytes.length; i++) {
+            result = result | ((bytes[i] & 0xFF) << (i * 8));
         }
-        return id;
+        return result;
     }
 
     protected byte[] getBytesFromInt(int value) {
@@ -191,12 +197,18 @@ public abstract class Message {
         return bytes;
     }
 
-    protected char getCRC(byte[] bytes) {
+    protected byte getCRC(byte[] bytes) {
         int summ = 0;
         for (int i = 0; i < bytes.length; i++) {
             summ ^= bytes[i];
         }
-        return (char)(summ & 0xFF);
+        return (byte)(summ & 0xFF);
+    }
+
+    protected long getImei(byte[] bytes) {
+        String str = new String(getCharArray(bytes));
+        System.out.println(str);
+        return Long.parseLong(str);
     }
 
     public static char[] getCharArray(byte[] bytes) {
@@ -207,7 +219,7 @@ public abstract class Message {
         return chars;
     }
 
-    protected byte crc8 (byte[] buffer)
+    public static byte crc8 (byte[] buffer)
     {
         byte crc = (byte) 0xFF;
         for (byte b : buffer) {

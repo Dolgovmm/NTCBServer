@@ -13,5 +13,6 @@ public class MessageEncoder extends MessageToByteEncoder<Message> {
         System.out.println("encode msg");
         System.out.println(Arrays.toString(msg.toByteArray()));
         out.writeBytes(msg.toByteArray());
+        ctx.writeAndFlush(out);
     }
 }
