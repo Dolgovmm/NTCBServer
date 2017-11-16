@@ -52,8 +52,8 @@ public class MessageToSetSetting extends Message {
         bytes[22] = Byte.parseByte(Integer.toString(protocol));
         bytes[23] = Byte.parseByte(Integer.toString(protocol_version));
         bytes[24] = Byte.parseByte(Integer.toString(struct_version));
-        bytes[14] = (byte)getCRC(Arrays.copyOfRange(bytes, 16, 25));
-        bytes[15] = (byte)getCRC(Arrays.copyOfRange(bytes, 0, 15));
+        bytes[14] = getCRC(Arrays.copyOfRange(bytes, 16, 25));
+        bytes[15] = getCRC(Arrays.copyOfRange(bytes, 0, 15));
         return bytes;
     }
 

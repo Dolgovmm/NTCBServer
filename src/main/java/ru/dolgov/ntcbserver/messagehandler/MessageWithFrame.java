@@ -9,7 +9,7 @@ public class MessageWithFrame extends Message {
     private int stageGaude;
     private long lastTime;
     private long latitude;
-    private long longtitude;
+    private long longitude;
     private int speed;
     private int course;
     private int crc;
@@ -23,12 +23,10 @@ public class MessageWithFrame extends Message {
         stageGaude = bytes[12] & 0xFF;
         lastTime = getIntFromBytes(Arrays.copyOfRange(bytes, 13, 17));
         latitude = getIntFromBytes(Arrays.copyOfRange(bytes, 17, 21));
-        longtitude = getIntFromBytes(Arrays.copyOfRange(bytes, 21, 25));
+        longitude = getIntFromBytes(Arrays.copyOfRange(bytes, 21, 25));
         speed = getIntFromBytes(Arrays.copyOfRange(bytes, 25, 29));
         course = getIntFromBytes(Arrays.copyOfRange(bytes, 29, 31));
-        crc = bytes[31] & 0xFF;
-        System.out.println(crc8(Arrays.copyOfRange(bytes, 2, 30)) & 0xFF);
-        System.out.println(toString());
+        crc = crc8(Arrays.copyOfRange(bytes, 2, 30)) & 0xFF;
     }
 
     @Override
@@ -58,7 +56,7 @@ public class MessageWithFrame extends Message {
         sb.append(", latitude=");
         sb.append(latitude);
         sb.append(", longtitude=");
-        sb.append(longtitude);
+        sb.append(longitude);
         sb.append(", speed=");
         sb.append(speed);
         sb.append(", course=");

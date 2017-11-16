@@ -22,22 +22,17 @@ public class Server {
         final EventLoopGroup workerGroup = new NioEventLoopGroup();
         try{
             ServerBootstrap server = new ServerBootstrap();
-            System.out.println("server created");
             server.localAddress(address, port);
             server.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                     .childHandler(new SocketChannelInitializer())
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
-            System.out.println("server configured");
             channelFuture = server.bind().sync();
-            System.out.println("server bind");
 
             channelFuture.channel().closeFuture().sync();
-            System.out.println("close future");
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
-            System.out.println("shutdown");
         }
     }
 }

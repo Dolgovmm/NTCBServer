@@ -39,8 +39,8 @@ public class MessageToConnect extends Message {
         bytes[16] = 0x2a;
         bytes[17] = 0x3c;
         bytes[18] = 0x53;
-        bytes[14] = (byte)getCRC(Arrays.copyOfRange(bytes, 16, 19));
-        bytes[15] = (byte)getCRC(Arrays.copyOfRange(bytes, 0, 15));
+        bytes[14] = getCRC(Arrays.copyOfRange(bytes, 16, 19));
+        bytes[15] = getCRC(Arrays.copyOfRange(bytes, 0, 15));
         return bytes;
     }
 
