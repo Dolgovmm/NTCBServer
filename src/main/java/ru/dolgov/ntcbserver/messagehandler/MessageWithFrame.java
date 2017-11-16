@@ -1,8 +1,13 @@
 package ru.dolgov.ntcbserver.messagehandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 
 public class MessageWithFrame extends Message {
+    static final Logger logger = LoggerFactory.getLogger(MessageWithFrame.class);
+
     private int numPage;
     private int code;
     private long time;
@@ -27,6 +32,7 @@ public class MessageWithFrame extends Message {
         speed = getIntFromBytes(Arrays.copyOfRange(bytes, 25, 29));
         course = getIntFromBytes(Arrays.copyOfRange(bytes, 29, 31));
         crc = crc8(Arrays.copyOfRange(bytes, 2, 30)) & 0xFF;
+        logger.info(toString());
     }
 
     @Override
