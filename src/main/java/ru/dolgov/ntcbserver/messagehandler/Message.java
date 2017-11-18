@@ -1,7 +1,5 @@
 package ru.dolgov.ntcbserver.messagehandler;
 
-import java.nio.ByteBuffer;
-
 public abstract class Message {
     protected String preambula;
     protected int idObj;

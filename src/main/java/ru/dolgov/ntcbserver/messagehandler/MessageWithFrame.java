@@ -88,7 +88,6 @@ public class MessageWithFrame extends Message {
             int v = bytes[i] & 0xff;
             sb.append(digits.charAt(v >> 4));
             sb.append(digits.charAt(v & 0xf));
-            //sb.append(Integer.toHexString(bytes[i]));
             sb.append(", ");
         }
         sb.append("\n {preambula=");
