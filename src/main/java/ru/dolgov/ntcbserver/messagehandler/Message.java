@@ -1,5 +1,7 @@
 package ru.dolgov.ntcbserver.messagehandler;
 
+import java.nio.ByteBuffer;
+
 public abstract class Message {
     protected String preambula;
     protected int idObj;
@@ -20,15 +22,16 @@ public abstract class Message {
     protected int getIntFromBytes(byte[] bytes) {
         int result = bytes[0] & 0xFF;
         for (int i = bytes.length - 1; i > 0; i--) {
-            result = result | ((bytes[i] & 0xFF) << (i * 8));
+            result |= ((bytes[i] & 0xFF) << (i * 8));
         }
         return result;
     }
 
     protected long getLongFromBytes(byte[] bytes) {
-        long result = bytes[0] & 0xFF;
-        for (int i = 1; i < bytes.length; i++) {
-            result = result | ((bytes[i] & 0xFF) << (i * 8));
+        long result = 0;
+        for (int i = 0; i < 8; i++) {
+            result <<= 8;
+            result |= (bytes[i] & 0xFF);
         }
         return result;
     }
@@ -52,7 +55,6 @@ public abstract class Message {
 
     protected long getImei(byte[] bytes) {
         String str = new String(getCharArray(bytes));
-        System.out.println(str);
         return Long.parseLong(str);
     }
 

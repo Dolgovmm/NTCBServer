@@ -10,9 +10,11 @@ import java.util.List;
 
 public class MessageDecoder extends ByteToMessageDecoder {
     private MessageEncoder messageEncoder;
+    private List<String> messageList;
 
-    public MessageDecoder(MessageEncoder messageEncoder) {
+    public MessageDecoder(MessageEncoder messageEncoder, List<String> messageList) {
         this.messageEncoder = messageEncoder;
+        this.messageList = messageList;
     }
 
     @Override
@@ -23,6 +25,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         Message message = MessageFactory.getMessage(bytes);
         message.fromByteArray(bytes);
         out.add(message);
+        messageList.add(message.toString());
         ByteBuf buf = ctx.alloc().buffer(message.toByteArray().length);
         messageEncoder.encode(ctx, message, buf);
     }

@@ -1,11 +1,15 @@
 package ru.dolgov.ntcbserver.messagehandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class MessageToConnect extends Message {
 
-    public MessageToConnect() {
-    }
+    static final Logger logger = LoggerFactory.getLogger(MessageToConnect.class);
 
     @Override
     public void fromByteArray(byte[] bytes)     {
@@ -16,7 +20,7 @@ public class MessageToConnect extends Message {
         csd = getCRC(Arrays.copyOfRange(bytes, 16, 35));
         csp = getCRC(Arrays.copyOfRange(bytes, 0, 15));
         imei = getImei(Arrays.copyOfRange(bytes, 20, 35));
-        System.out.println(toString());
+        logger.info(toLog(bytes));
     }
 
     @Override
@@ -62,6 +66,35 @@ public class MessageToConnect extends Message {
         sb.append(", imei=");
         sb.append(imei);
         sb.append("}");
+        return sb.toString();
+    }
+
+    private String toLog(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+        sb.append(" принято ");
+        sb.append(bytes.length);
+        sb.append(" байт: ");
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append("0x");
+            sb.append(Integer.toHexString(bytes[i]));
+            sb.append(", ");
+        }
+        sb.append("\n {preambula=");
+        sb.append(preambula);
+        sb.append(", idObj=");
+        sb.append(idObj);
+        sb.append(", idDc=");
+        sb.append(idDc);
+        sb.append(", size=");
+        sb.append(size);
+        sb.append(", csd=");
+        sb.append(csd);
+        sb.append(", csp=");
+        sb.append(csp);
+        sb.append(", imei=");
+        sb.append(imei);
+        sb.append("} \n");
         return sb.toString();
     }
 }

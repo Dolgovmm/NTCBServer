@@ -4,13 +4,15 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 
+import java.util.List;
+
 public class SocketChannelInitializer extends ChannelInitializer<SocketChannel> {
     private MessageDecoder messageDecoder;
     private MessageEncoder messageEncoder;
 
-    public SocketChannelInitializer() {
+    public SocketChannelInitializer(List<String> messageList) {
         this.messageEncoder = new MessageEncoder();
-        this.messageDecoder = new MessageDecoder(this.messageEncoder);
+        this.messageDecoder = new MessageDecoder(this.messageEncoder, messageList);
     }
 
     @Override

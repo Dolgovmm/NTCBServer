@@ -1,8 +1,15 @@
 package ru.dolgov.ntcbserver.messagehandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class MessageToSetSetting extends Message {
+    static final Logger logger = LoggerFactory.getLogger(MessageToSetSetting.class);
+
     private int protocol;
     private int protocol_version;
     private int struct_version;
@@ -21,9 +28,9 @@ public class MessageToSetSetting extends Message {
         protocol_version = bytes[23];
         struct_version = bytes[24];
         data_size = bytes[25];
-        long l = getLongFromBytes(Arrays.copyOfRange(bytes, 26, 35));
-        bitField = Long.toBinaryString(l);
-        System.out.println(toString());
+        long bits = getLongFromBytes(Arrays.copyOfRange(bytes, 26, 35));
+        bitField = Long.toBinaryString(bits);
+        logger.info(toLog(bytes));
     }
 
     @Override
@@ -85,6 +92,45 @@ public class MessageToSetSetting extends Message {
         sb.append(", bit field=");
         sb.append(bitField);
         sb.append("}");
+        return sb.toString();
+    }
+
+    private String toLog(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+        sb.append(" принято ");
+        sb.append(bytes.length);
+        sb.append(" байт: ");
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append("0x");
+            sb.append(Integer.toHexString(bytes[i]));
+            sb.append(", ");
+        }
+        sb.append("\n {preambula=");
+        sb.append(preambula);
+        sb.append(", idObj=");
+        sb.append(idObj);
+        sb.append(", idDc=");
+        sb.append(idDc);
+        sb.append(", size=");
+        sb.append(size);
+        sb.append(", csd=");
+        sb.append(csd);
+        sb.append(", csp=");
+        sb.append(csp);
+        sb.append(", imei=");
+        sb.append(imei);
+        sb.append(", protocol=");
+        sb.append(protocol);
+        sb.append(", protocol version=");
+        sb.append(protocol_version);
+        sb.append(", structure version=");
+        sb.append(struct_version);
+        sb.append(", data size=");
+        sb.append(data_size);
+        sb.append(", bit field=");
+        sb.append(bitField);
+        sb.append("} \n");
         return sb.toString();
     }
 }
