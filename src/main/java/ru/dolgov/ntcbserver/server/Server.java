@@ -8,11 +8,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.dolgov.ntcbserver.server.printer.Printer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Server {
     static final Logger logger = LoggerFactory.getLogger(Server.class);
@@ -20,12 +19,13 @@ public class Server {
     private String address;
     private int port;
     private ChannelFuture channelFuture;
-    private List<String> messageList;
+    private SocketChannelInitializer socketChannelInitializer;
+    private Printer printer;
 
     public Server(String address, int port) {
         this.address = address;
         this.port = port;
-        messageList = new LinkedList();
+        socketChannelInitializer = new SocketChannelInitializer();
     }
 
     public void run() throws Exception {
@@ -35,7 +35,7 @@ public class Server {
             ServerBootstrap server = new ServerBootstrap();
             server.localAddress(address, port);
             server.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-                    .childHandler(new SocketChannelInitializer(messageList))
+                    .childHandler(socketChannelInitializer)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             channelFuture = server.bind().sync();
@@ -47,21 +47,15 @@ public class Server {
         }
     }
 
-    public String getLogFromList() {
-        String str;
-        if (!messageList.isEmpty()) {
-            str = messageList.get(0);
-            messageList.remove(0);
-            return str;
-        }
-        return null;
-    }
-
     public void shutdown() {
         try {
             channelFuture.channel().close().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setPrinter(Printer printer) {
+        socketChannelInitializer.setPrinter(printer);
     }
 }

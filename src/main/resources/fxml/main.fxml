@@ -16,7 +16,7 @@
             </HBox>
          </top>
          <center>
-            <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <TextArea fx:id="textArea" wrapText="true" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center></BorderPane>
    </children>
 </AnchorPane>

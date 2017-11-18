@@ -15,6 +15,8 @@ public abstract class Message {
 
     public abstract byte[] toByteArray();
 
+    public abstract String toLog(byte[] bytes);
+
     protected String getPreambula(byte[] bytes) {
         return new String(getCharArray(bytes));
     }

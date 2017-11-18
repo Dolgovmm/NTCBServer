@@ -76,7 +76,7 @@ public class MessageWithFrame extends Message {
         return sb.toString();
     }
 
-    private String toLog(byte[] bytes) {
+    public String toLog(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         sb.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         sb.append(" принято ");

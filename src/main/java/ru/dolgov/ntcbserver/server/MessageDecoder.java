@@ -5,16 +5,16 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import ru.dolgov.ntcbserver.messagehandler.Message;
 import ru.dolgov.ntcbserver.messagehandler.MessageFactory;
+import ru.dolgov.ntcbserver.server.printer.Printer;
 
 import java.util.List;
 
 public class MessageDecoder extends ByteToMessageDecoder {
     private MessageEncoder messageEncoder;
-    private List<String> messageList;
+    private Printer printer;
 
-    public MessageDecoder(MessageEncoder messageEncoder, List<String> messageList) {
+    public MessageDecoder(MessageEncoder messageEncoder) {
         this.messageEncoder = messageEncoder;
-        this.messageList = messageList;
     }
 
     @Override
@@ -25,8 +25,14 @@ public class MessageDecoder extends ByteToMessageDecoder {
         Message message = MessageFactory.getMessage(bytes);
         message.fromByteArray(bytes);
         out.add(message);
-        messageList.add(message.toString());
+        if (printer != null) {
+            printer.print(message.toLog(bytes));
+        }
         ByteBuf buf = ctx.alloc().buffer(message.toByteArray().length);
         messageEncoder.encode(ctx, message, buf);
+    }
+
+    public void setPrinter(Printer printer) {
+        this.printer = printer;
     }
 }
