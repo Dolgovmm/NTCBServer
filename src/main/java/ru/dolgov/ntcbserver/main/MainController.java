@@ -32,6 +32,9 @@ public class MainController {
     }
 
     public void onStopButton(ActionEvent actionEvent) {
+        if (printer != null) {
+            printer.print(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")) + " сервер остановлен");
+        }
         server.shutdown();
     }
 }

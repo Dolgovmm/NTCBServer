@@ -96,6 +96,7 @@ public class MessageToSetSetting extends Message {
     }
 
     public String toLog(byte[] bytes) {
+        String digits = "0123456789abcdef";
         StringBuilder sb = new StringBuilder();
         sb.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         sb.append(" принято ");
@@ -103,7 +104,10 @@ public class MessageToSetSetting extends Message {
         sb.append(" байт: ");
         for (int i = 0; i < bytes.length; i++) {
             sb.append("0x");
-            sb.append(Integer.toHexString(bytes[i]));
+            int v = bytes[i] & 0xff;
+            sb.append(digits.charAt(v >> 4));
+            sb.append(digits.charAt(v & 0xf));
+            //sb.append(Integer.toHexString(bytes[i]));
             sb.append(", ");
         }
         sb.append("\n {preambula=");
