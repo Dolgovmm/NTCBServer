@@ -17,7 +17,7 @@ public class MessageWithFrame extends Message {
     private long lastTime;
     private long latitude;
     private long longitude;
-    private int speed;
+    private float speed;
     private int course;
     private int crc;
 
@@ -31,7 +31,8 @@ public class MessageWithFrame extends Message {
         lastTime = getIntFromBytes(Arrays.copyOfRange(bytes, 13, 17));
         latitude = getIntFromBytes(Arrays.copyOfRange(bytes, 17, 21));
         longitude = getIntFromBytes(Arrays.copyOfRange(bytes, 21, 25));
-        speed = getIntFromBytes(Arrays.copyOfRange(bytes, 25, 29));
+        int tmp = getIntFromBytes(Arrays.copyOfRange(bytes, 25, 29));
+        speed = Float.intBitsToFloat(tmp);
         course = getIntFromBytes(Arrays.copyOfRange(bytes, 29, 31));
         crc = crc8(Arrays.copyOfRange(bytes, 2, 30)) & 0xFF;
         logger.info(toLog(bytes));
