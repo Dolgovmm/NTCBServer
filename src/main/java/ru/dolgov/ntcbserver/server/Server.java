@@ -6,21 +6,12 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.dolgov.ntcbserver.server.printer.Printer;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Server {
-    static final Logger logger = LoggerFactory.getLogger(Server.class);
-
-    private String address;
+	private String address;
     private int port;
     private ChannelFuture channelFuture;
     private SocketChannelInitializer socketChannelInitializer;
-    private Printer printer;
 
     public Server(String address, int port) {
         this.address = address;
@@ -39,7 +30,6 @@ public class Server {
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             channelFuture = server.bind().sync();
-            logger.info(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")) + " сервер запущен");
             channelFuture.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();
@@ -53,9 +43,5 @@ public class Server {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setPrinter(Printer printer) {
-        socketChannelInitializer.setPrinter(printer);
     }
 }
